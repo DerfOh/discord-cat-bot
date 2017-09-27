@@ -1,4 +1,4 @@
-package cat
+package command
 
 import (
 	"encoding/json"

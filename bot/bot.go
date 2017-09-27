@@ -6,8 +6,8 @@ import (
 	"time"
 
 	"github.com/bwmarrin/discordgo"
-	"github.com/derfoh/cat-bot/commands"
-	"github.com/derfoh/cat-bot/config"
+	"github.com/derfoh/discord-cat-bot/commands"
+	"github.com/derfoh/discord-cat-bot/config"
 )
 
 // BotID is the id set by discord in the main function
@@ -46,12 +46,13 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 			return
 		}
 
-		// if the message contains the string then do the thing
+		// if the message contains the string then call a function that responds with a string
 		if m.Content == "!cat" {
-			response := cat.Cat()
+			response := command.Cat()
 			s.ChannelMessageSend(m.ChannelID, response)
 		}
 
+		// return a simple message
 		if m.Content == "!time" {
 			t := time.Now()
 			s.ChannelMessageSend(m.ChannelID, "The time is "+t.Format("15:04")+" in catsville.")

@@ -6,8 +6,8 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/derfoh/cat-bot/bot"
-	"github.com/derfoh/cat-bot/config"
+	"github.com/derfoh/discord-cat-bot/bot"
+	"github.com/derfoh/discord-cat-bot/config"
 )
 
 func main() {
