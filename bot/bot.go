@@ -63,8 +63,6 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 			s.ChannelMessageSend(m.ChannelID, "The date is "+t.Format("01-02-2006")+" in catsville.")
 		}
 
-		// print message content
-		fmt.Println(m.Content)
 	}
 
 }
