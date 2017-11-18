@@ -47,8 +47,13 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 		}
 
 		// if the message contains the string then call a function that responds with a string
-		if m.Content == "!cat" {
+		if strings.Contains(m.Content, "!cat") {
 			response := command.Cat()
+			s.ChannelMessageSend(m.ChannelID, response)
+		}
+
+		if strings.Contains(m.Content, "!8ball") {
+			response := command.EightBall()
 			s.ChannelMessageSend(m.ChannelID, response)
 		}
 
