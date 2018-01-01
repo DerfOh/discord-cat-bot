@@ -57,6 +57,12 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 			s.ChannelMessageSend(m.ChannelID, response)
 		}
 
+		if strings.Contains(m.Content, "!compare") {
+			content := strings.Split(m.Content, " ")
+			response := command.Compare(content[1], content[2])
+			s.ChannelMessageSend(m.ChannelID, response)
+		}
+
 		// return a simple message
 		if m.Content == "!time" {
 			t := time.Now()
