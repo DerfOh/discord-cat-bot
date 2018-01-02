@@ -59,7 +59,7 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 		if strings.Contains(m.Content, "!compare") {
 			content := strings.Split(m.Content, " ")
-			response := command.Compare(content[1], content[2])
+			response := command.Compare(content)
 			s.ChannelMessageSend(m.ChannelID, response)
 		}
 
