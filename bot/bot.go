@@ -65,6 +65,11 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 			s.ChannelMessageSend(m.ChannelID, response)
 		}
 
+		if strings.Contains(m.Content, "isup") {
+			response := command.IsUp(content)
+			s.ChannelMessageSend(m.ChannelID, response)
+		}
+
 		// return a simple message
 		if m.Content == "!time" {
 			t := time.Now()
@@ -74,6 +79,13 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 		if m.Content == "!date" {
 			t := time.Now()
 			s.ChannelMessageSend(m.ChannelID, "The date is "+t.Format("01-02-2006")+" in catsville.")
+		}
+
+		if strings.Contains(m.Content, "ping") {
+			start := time.Now()
+			s.ChannelMessageSend(m.ChannelID, "")
+			elapsed := time.Since(start)
+			s.ChannelMessageSend(m.ChannelID, "Pong! "+elapsed.String())
 		}
 
 	}
