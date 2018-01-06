@@ -15,7 +15,7 @@ var (
 
 type configStruct struct {
 	Token     string `json:"Token"`
-	BotPrefix string `json:"Prefix"`
+	BotPrefix string `json:"BotPrefix"`
 }
 
 // ReadConfig reads the contents of the config file

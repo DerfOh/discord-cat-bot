@@ -39,6 +39,9 @@ func Start() {
 }
 
 func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
+	// split the contents of the string into an array
+	content := strings.Split(m.Content, " ")
+
 	// check for prefix
 	if strings.HasPrefix(m.Content, config.BotPrefix) {
 		// ignore the bots messages
@@ -47,18 +50,17 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 		}
 
 		// if the message contains the string then call a function that responds with a string
-		if strings.Contains(m.Content, "!cat") {
+		if strings.Contains(m.Content, "cat") {
 			response := command.Cat()
 			s.ChannelMessageSend(m.ChannelID, response)
 		}
 
-		if strings.Contains(m.Content, "!8ball") {
+		if strings.Contains(m.Content, "8ball") {
 			response := command.EightBall()
 			s.ChannelMessageSend(m.ChannelID, response)
 		}
 
-		if strings.Contains(m.Content, "!compare") {
-			content := strings.Split(m.Content, " ")
+		if strings.Contains(m.Content, "compare") {
 			response := command.Compare(content)
 			s.ChannelMessageSend(m.ChannelID, response)
 		}
