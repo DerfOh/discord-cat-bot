@@ -19,14 +19,20 @@ jobs:
     ####   /go/src/bitbucket.org/circleci/go-tool
     working_directory: /go/src/github.com/{{ORG_NAME}}/{{REPO_NAME}}
     steps:
+      - setup_remote_docker
       - checkout
 
-      # specify any bash command here prefixed with `run: `
+      # Set up environment
+      - run: docker login -u $DOCKER_USER -p $DOCKER_PASS
+      - run: echo '{ "Token":"'$TOKEN'", "BotPrefix":"'$PREFIX'" }' > config.json
+
+      # get test and build the app
       - run: go get -v -t -d ./...
       - run: go test -v ./...
-deployment:
-  hub:
-    branch: master
-    commands:
-      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
-      - docker push derfoh/discord-cat-bot
+      - run: go build -o discord-cat-bot .
+
+      # build the application image
+      - run: ./dockerbuild.sh
+
+      # deploy the image
+      - run: docker push derfoh/discord-cat-bot
