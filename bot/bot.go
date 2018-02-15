@@ -81,6 +81,10 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 			s.ChannelMessageSend(m.ChannelID, "The date is "+t.Format("01-02-2006")+" in catsville.")
 		}
 
+		if m.Content == "!iloveyou" {
+			s.ChannelMessageSend(m.ChannelID, "I know.")
+		}
+
 		if strings.Contains(m.Content, "ping") {
 			start := time.Now()
 			s.ChannelMessageSend(m.ChannelID, "")
