@@ -3,20 +3,29 @@
 # Check https://circleci.com/docs/2.0/language-go/ for more details
 version: 2
 jobs:
+  test:
+    docker:
+        # specify the version
+        - image: circleci/golang:1.8
+
+      working_directory: /go/src/github.com/derfoh/discord-cat-bot
+      steps:
+        - setup_remote_docker
+        - checkout
+
+        # Set up environment
+        - run: docker login -u $DOCKER_USER -p $DOCKER_PASS
+        - run: echo '{ "Token":"'$TOKEN'", "BotPrefix":"'$PREFIX'" }' > config.json
+
+        # get test and build the app
+        - run: go get -v -t -d ./...
+        - run: go test -v ./...
+
   build:
     docker:
       # specify the version
       - image: circleci/golang:1.8
-      
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/postgres:9.4
 
-    #### TEMPLATE_NOTE: go expects specific checkout path representing url
-    #### expecting it in the form of
-    ####   /go/src/github.com/circleci/go-tool
-    ####   /go/src/bitbucket.org/circleci/go-tool
     working_directory: /go/src/github.com/derfoh/discord-cat-bot
     steps:
       - setup_remote_docker
@@ -34,5 +43,14 @@ jobs:
       # build the application image
       - run: ./dockerbuild.sh
 
+  deploy:
+    steps:
       # deploy the image
       - run: docker push derfoh/discord-cat-bot
+workflows:
+  version: 2
+  build_and_deploy:
+    jobs:
+      - test
+      - build
+      - deploy
