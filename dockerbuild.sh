@@ -9,7 +9,8 @@ echo "Getting dependencies for discord-cat-bot"
 
 echo "Build go binary for scratch container"
 # go build -a -installsuffix cgo .
-go build -o discord-cat-bot .
+go get github.com/ahmetb/govvv
+govvv build -o discord-cat-bot .
 
 echo "Get CA Certs from cURL"
 wget http://curl.haxx.se/download/curl-7.58.0.tar.bz2
