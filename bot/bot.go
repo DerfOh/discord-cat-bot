@@ -60,7 +60,7 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 		s.ChannelMessageSend(m.ChannelID, "Welcome "+m.Author.Username+".")
 	}
 
-	if (strings.Contains(m.Content, "good bye") || strings.Contains(m.Content, "Goodbye") || strings.Contains(m.Content, "goodnight")) && (strings.Contains(m.Content, "cat-bot") || strings.Contains(m.Content, BotID)) {
+	if (strings.Contains(m.Content, "good bye") || strings.Contains(m.Content, "Good bye") || strings.Contains(m.Content, "Goodbye") || strings.Contains(m.Content, "Good bye")) && (strings.Contains(m.Content, "cat-bot") || strings.Contains(m.Content, BotID)) {
 		s.ChannelMessageSend(m.ChannelID, "See ya "+m.Author.Username+"!")
 	}
 
