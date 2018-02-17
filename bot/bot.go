@@ -44,7 +44,7 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	content := strings.Split(m.Content, " ")
 
 	// check for prefix or @ mention
-	if strings.HasPrefix(m.Content, config.BotPrefix) {
+	if strings.HasPrefix(m.Content, config.BotPrefix) || strings.Contains(m.Content, BotID) {
 		// ignore the bots messages
 		if m.Author.ID == BotID {
 			return
