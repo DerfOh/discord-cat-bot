@@ -87,7 +87,7 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 		}
 
 		if m.Content == "!version" {
-			s.ChannelMessageSend(m.ChannelID, "--Current Build Info-- \n"+"Branch: "+GitBranch+"\n Commit: "+GitSummary+"\n Timestamp: "+BuildDate)
+			s.ChannelMessageSend(m.ChannelID, " \n"+"Branch: "+GitBranch+"\n Commit: "+GitSummary+"\n Timestamp: "+BuildDate)
 		}
 
 		if strings.Contains(m.Content, "meow") {
