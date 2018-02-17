@@ -100,7 +100,7 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 			s.ChannelMessageSend(m.ChannelID, "Pong! "+elapsed.String())
 		}
 
-		if strings.Contains(m.Content, "thanks") {
+		if strings.Contains(m.Content, "thanks") || strings.Contains(m.Content, "Thanks") || strings.Contains(m.Content, "Thank you") || strings.Contains(m.Content, "thank you") {
 			s.ChannelMessageSend(m.ChannelID, "You're welcome "+m.Author.Mention()+"!")
 		}
 
