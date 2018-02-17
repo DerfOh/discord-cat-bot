@@ -44,7 +44,7 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	content := strings.Split(m.Content, " ")
 
 	// check for prefix or @ mention
-	if strings.HasPrefix(m.Content, config.BotPrefix) || strings.Contains(m.Content, BotID) {
+	if strings.HasPrefix(m.Content, config.BotPrefix) {
 		// ignore the bots messages
 		if m.Author.ID == BotID {
 			return
@@ -100,19 +100,19 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 			s.ChannelMessageSend(m.ChannelID, "Pong! "+elapsed.String())
 		}
 
-		if strings.Contains(m.Content, "thanks") && (strings.Contains(m.Content, "cat-bot")) {
+		if strings.Contains(m.Content, "thanks") {
 			s.ChannelMessageSend(m.ChannelID, "You're welcome "+m.Author.Mention()+"!")
 		}
 
-		if (strings.Contains(m.Content, "good night") || strings.Contains(m.Content, "Good night") || strings.Contains(m.Content, "goodnight")) && (strings.Contains(m.Content, "cat-bot")) {
+		if strings.Contains(m.Content, "good night") || strings.Contains(m.Content, "Good night") || strings.Contains(m.Content, "goodnight") {
 			s.ChannelMessageSend(m.ChannelID, "Good night "+m.Author.Mention()+".")
 		}
 
-		if (strings.Contains(m.Content, "good morning") || strings.Contains(m.Content, "Good morning")) && (strings.Contains(m.Content, "cat-bot")) {
+		if strings.Contains(m.Content, "good morning") || strings.Contains(m.Content, "Good morning") {
 			s.ChannelMessageSend(m.ChannelID, "Good morning "+m.Author.Mention()+"!")
 		}
 
-		if (strings.Contains(m.Content, "hello") || strings.Contains(m.Content, "Hello")) && (strings.Contains(m.Content, "cat-bot")) {
+		if strings.Contains(m.Content, "hello") || strings.Contains(m.Content, "Hello") {
 			s.ChannelMessageSend(m.ChannelID, "Welcome "+m.Author.Mention()+".")
 		}
 
