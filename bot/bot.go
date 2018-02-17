@@ -15,7 +15,8 @@ var BotID string
 var goBot *discordgo.Session
 
 // Start starts opens connections and starts the bot
-func Start() {
+func Start(GitCommit string, GitBranch string, GitState string, GitSummary string, BuildDate string, Version string) {
+
 	// connect
 	goBot, err := discordgo.New("Bot " + config.Token)
 	checkExit(err)
@@ -82,7 +83,14 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 		}
 
 		if m.Content == "!iloveyou" {
-			s.ChannelMessageSend(m.ChannelID, "I know.")
+			s.ChannelMessageSend(m.ChannelID, "I know."+m.Author.Username)
+		}
+
+		if strings.Contains(m.Content, "meow") {
+			start := time.Now()
+			s.ChannelMessageSend(m.ChannelID, "")
+			elapsed := time.Since(start)
+			s.ChannelMessageSend(m.ChannelID, "(Meow took "+elapsed.String()+")")
 		}
 
 		if strings.Contains(m.Content, "ping") {

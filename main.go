@@ -10,11 +10,15 @@ import (
 	"github.com/derfoh/discord-cat-bot/config"
 )
 
+// provided by govvv at compile-time
+var GitCommit, GitBranch, GitState, GitSummary, BuildDate, Version string
+
 func main() {
+	fmt.Printf("Branch: %s\nSummary: %s\nTimestamp: %s\n", GitBranch, GitSummary, BuildDate)
 	err := config.ReadConfig()
 	checkExit(err)
 
-	bot.Start()
+	bot.Start(GitCommit, GitBranch, GitState, GitSummary, BuildDate, Version)
 
 	// Wait here until CTRL-C or other term signal is received.
 	sc := make(chan os.Signal, 1)
