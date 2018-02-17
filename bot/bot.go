@@ -88,7 +88,7 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 		if strings.Contains(m.Content, "meow") {
 			start := time.Now()
-			s.ChannelMessageSend(m.ChannelID, "")
+			s.ChannelMessageSend(m.ChannelID, "Meow!")
 			elapsed := time.Since(start)
 			s.ChannelMessageSend(m.ChannelID, "(Meow took "+elapsed.String()+")")
 		}
