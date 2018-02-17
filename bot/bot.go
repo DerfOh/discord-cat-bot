@@ -43,6 +43,10 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	// split the contents of the string into an array
 	content := strings.Split(m.Content, " ")
 
+	if strings.Contains(m.Content, "thanks") && strings.Contains(m.Content, "cat-bot") {
+		s.ChannelMessageSend(m.ChannelID, "You're welcome!")
+	}
+
 	// check for prefix
 	if strings.HasPrefix(m.Content, config.BotPrefix) {
 		// ignore the bots messages
