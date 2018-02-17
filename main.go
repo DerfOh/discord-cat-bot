@@ -11,14 +11,14 @@ import (
 )
 
 // provided by govvv at compile-time
-var GitCommit, GitBranch, GitState, GitSummary, BuildDate, Version string
+var GitBranch, GitSummary, BuildDate string
 
 func main() {
 	fmt.Printf("Branch: %s\nSummary: %s\nTimestamp: %s\n", GitBranch, GitSummary, BuildDate)
 	err := config.ReadConfig()
 	checkExit(err)
 
-	bot.Start(GitCommit, GitBranch, GitState, GitSummary, BuildDate, Version)
+	bot.Start(GitBranch, GitSummary, BuildDate)
 
 	// Wait here until CTRL-C or other term signal is received.
 	sc := make(chan os.Signal, 1)

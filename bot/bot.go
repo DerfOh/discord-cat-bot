@@ -15,7 +15,7 @@ var BotID string
 var goBot *discordgo.Session
 
 // Start starts opens connections and starts the bot
-func Start(GitCommit string, GitBranch string, GitState string, GitSummary string, BuildDate string, Version string) {
+func Start(GitBranch string, GitSummary string, BuildDate string) {
 
 	// connect
 	goBot, err := discordgo.New("Bot " + config.Token)
