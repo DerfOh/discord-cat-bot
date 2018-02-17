@@ -13,9 +13,15 @@ import (
 // BotID is the id set by discord in the main function
 var BotID string
 var goBot *discordgo.Session
+var startTime time.Time
+
+func uptime() time.Duration {
+	return time.Since(startTime)
+}
 
 // Start starts opens connections and starts the bot
 func Start(GitBranch string, GitSummary string, BuildDate string) {
+	startTime = time.Now()
 
 	// connect
 	goBot, err := discordgo.New("Bot " + config.Token)
@@ -87,7 +93,8 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 		}
 
 		if m.Content == "!version" {
-			s.ChannelMessageSend(m.ChannelID, " \n"+"Branch: "+GitBranch+"\n Commit: "+GitSummary+"\n Timestamp: "+BuildDate)
+			uptime := uptime()
+			s.ChannelMessageSend(m.ChannelID, "Uptime: "+uptime.String()+" \n"+"Branch: "+GitBranch+"\n Commit: "+GitSummary+"\n Timestamp: "+BuildDate)
 		}
 
 		if strings.Contains(m.Content, "meow") {
