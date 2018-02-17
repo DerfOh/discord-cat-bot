@@ -20,7 +20,7 @@ jobs:
       # get test and build the app
       - run: go get -v -t -d ./...
       - run: go test -v ./...
-      - run: go build -o discord-cat-bot .
+      - run: govvv build -o discord-cat-bot .
 
       # build the application image
       - run: ./dockerbuild.sh
