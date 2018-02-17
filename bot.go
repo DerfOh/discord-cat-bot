@@ -1,4 +1,4 @@
-package bot
+package main
 
 import (
 	"fmt"
@@ -86,6 +86,10 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 			s.ChannelMessageSend(m.ChannelID, "I know."+m.Author.Username)
 		}
 
+		if m.Content == "!version" {
+			s.ChannelMessageSend(m.ChannelID, "\n"+"Branch: "+GitBranch+"\n Commit: GitSummary"+"\n Timestamp: BuildDate")
+		}
+
 		if strings.Contains(m.Content, "meow") {
 			start := time.Now()
 			s.ChannelMessageSend(m.ChannelID, "Meow!")
@@ -128,19 +132,4 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 func Stop() {
 	// Cleanly close down the Discord session.
 	goBot.Close()
-}
-
-// basic error checker for go, logs then keeps running
-func checkLog(err error) {
-	if err != nil {
-		fmt.Println(err.Error())
-	}
-}
-
-// basic error checker for go, logs then exits
-func checkExit(err error) {
-	if err != nil {
-		fmt.Println(err.Error())
-		return
-	}
 }
