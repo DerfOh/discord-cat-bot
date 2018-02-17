@@ -116,7 +116,7 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 			s.ChannelMessageSend(m.ChannelID, "Welcome "+m.Author.Mention()+".")
 		}
 
-		if (strings.Contains(m.Content, "good bye") || strings.Contains(m.Content, "Good bye") || strings.Contains(m.Content, "Goodbye") || strings.Contains(m.Content, "Good bye")) && (strings.Contains(m.Content, "cat-bot")) {
+		if strings.Contains(m.Content, "good bye") || strings.Contains(m.Content, "Good bye") || strings.Contains(m.Content, "Goodbye") || strings.Contains(m.Content, "Good bye") {
 			s.ChannelMessageSend(m.ChannelID, "See ya "+m.Author.Mention()+"!")
 		}
 
