@@ -15,7 +15,7 @@ var BotID string
 var goBot *discordgo.Session
 var startTime time.Time
 
-func uptime() time.Duration {
+func getUptime() time.Duration {
 	return time.Since(startTime)
 }
 
@@ -62,7 +62,7 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 			s.ChannelMessageSend(m.ChannelID, response)
 		}
 
-		if strings.Contains(m.Content, "8ball") {
+		if strings.Contains(m.Content, "8ball") || strings.Contains(m.Content, "should") {
 			response := command.EightBall()
 			s.ChannelMessageSend(m.ChannelID, response)
 		}
@@ -92,9 +92,19 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 			s.ChannelMessageSend(m.ChannelID, "I know."+m.Author.Username)
 		}
 
-		if m.Content == "!version" {
-			uptime := uptime()
-			s.ChannelMessageSend(m.ChannelID, "Uptime: "+uptime.String()+" \n"+"Branch: "+GitBranch+"\n Commit: "+GitSummary+"\n Timestamp: "+BuildDate)
+		if m.Content == "!about" {
+			uptime := getUptime()
+			//s.ChannelMessageSend(m.ChannelID, "Uptime: "+uptime.String()+" \n"+"Branch: "+GitBranch+"\n Commit: "+GitSummary+"\n Timestamp: "+BuildDate)
+			embed := NewEmbed().
+				SetTitle("cat-bot statistics").
+				SetDescription("Uptime: "+uptime.String()).
+				AddField("Branch: ", GitBranch).
+				AddField("Commit: ", GitSummary).
+				SetImage("https://cdn.discordapp.com/avatars/119249192806776836/cc32c5c3ee602e1fe252f9f595f9010e.jpg?size=2048").
+				SetThumbnail("https://cdn.discordapp.com/avatars/119249192806776836/cc32c5c3ee602e1fe252f9f595f9010e.jpg?size=2048").
+				SetColor(0x00ff00).MessageEmbed
+
+			s.ChannelMessageSendEmbed(m.ChannelID, embed)
 		}
 
 		if strings.Contains(m.Content, "meow") {
