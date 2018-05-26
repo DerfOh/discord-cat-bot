@@ -62,6 +62,11 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 			s.ChannelMessageSend(m.ChannelID, response)
 		}
 
+		if strings.Contains(m.Content, "fact") {
+			response := command.CatFact()
+			s.ChannelMessageSend(m.ChannelID, response)
+		}
+
 		if strings.Contains(m.Content, "8ball") || strings.Contains(m.Content, "should") {
 			response := command.EightBall()
 			s.ChannelMessageSend(m.ChannelID, response)
