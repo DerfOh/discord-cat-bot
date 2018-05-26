@@ -15,7 +15,7 @@ var catpic = catpicStruct{}
 
 //Cat returns url of a random cat image
 func Cat() string {
-	resp, err := http.Get("http://random.cat/meow")
+	resp, err := http.Get("http://aws.random.cat/meow")
 	if err != nil {
 		fmt.Println(err.Error())
 	}
