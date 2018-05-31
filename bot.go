@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 	"time"
 
@@ -35,6 +36,13 @@ func Start(GitBranch string, GitSummary string, BuildDate string) {
 
 	// Add handlers
 	goBot.AddHandler(messageHandler)
+	goBot.AddHandler(func(discord *discordgo.Session, ready *discordgo.Ready) {
+		servers := goBot.State.Guilds
+		err = goBot.UpdateStatus(0, "with yarn on "+strconv.Itoa(len(servers))+" servers.")
+		if err != nil {
+			fmt.Println("Error attempting to set my status")
+		}
+	})
 
 	// Open connection
 	err = goBot.Open()
@@ -48,12 +56,15 @@ func Start(GitBranch string, GitSummary string, BuildDate string) {
 func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	// split the contents of the string into an array
 	content := strings.Split(m.Content, " ")
+	// var c *discordgo.Channel
 
 	// check for prefix or @ mention
 	if strings.HasPrefix(m.Content, config.BotPrefix) || strings.Contains(m.Content, BotID) {
 		// ignore the bots messages
 		if m.Author.ID == BotID {
 			return
+		} else {
+			fmt.Println(m.Author.ID + ": " + m.Content)
 		}
 
 		// if the message contains the string then call a function that responds with a string
@@ -82,7 +93,7 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 			s.ChannelMessageSend(m.ChannelID, response)
 		}
 
-		// return a simple message
+		// simple commands that aren't in the commands folder
 		if m.Content == "!time" {
 			t := time.Now()
 			s.ChannelMessageSend(m.ChannelID, "The time is "+t.Format("15:04")+" in catsville.")
@@ -94,7 +105,13 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 		}
 
 		if m.Content == "!iloveyou" {
-			s.ChannelMessageSend(m.ChannelID, "I know."+m.Author.Username)
+			s.ChannelMessageSend(m.ChannelID, "I know "+m.Author.Username)
+		}
+
+		if strings.Contains(m.Content, "vote") {
+			fmt.Println("reaction")
+			s.MessageReactionAdd(m.ChannelID, m.ID, "👍")
+			s.MessageReactionAdd(m.ChannelID, m.ID, "👎")
 		}
 
 		if m.Content == "!about" {
@@ -110,6 +127,7 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 				SetColor(0x00ff00).MessageEmbed
 
 			s.ChannelMessageSendEmbed(m.ChannelID, embed)
+
 		}
 
 		if strings.Contains(m.Content, "meow") {
