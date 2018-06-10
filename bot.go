@@ -24,8 +24,8 @@ func GetUptime() time.Duration {
 // Start starts opens connections and starts the bot
 func Start(GitBranch string, GitSummary string, BuildDate string) {
 	startTime = time.Now()
-	about.SetStart(startTime)
-	about.SetGit(GitBranch, GitSummary, BuildDate)
+	command.SetStart(startTime)
+	command.SetGit(GitBranch, GitSummary, BuildDate)
 
 	// connect
 	goBot, err := discordgo.New("Bot " + config.Token)
