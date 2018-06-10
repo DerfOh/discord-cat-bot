@@ -19,6 +19,8 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+
+	"github.com/bwmarrin/discordgo"
 )
 
 type catpicStruct struct {
@@ -31,7 +33,7 @@ type catpicStruct struct {
 var catpic = catpicStruct{}
 
 //Cat returns url of a random cat image
-func Cat() string {
+func Cat(s *discordgo.Session, m *discordgo.MessageCreate) {
 	resp, err := http.Get("http://thecatapi.com/api/images/get?format=xml&results_per_page=1&type=gif")
 	if err != nil {
 		fmt.Println(err.Error())
@@ -43,11 +45,7 @@ func Cat() string {
 	err = xml.Unmarshal([]byte(body), &catpic)
 	if err != nil {
 		fmt.Printf("error: %v", err)
-		//return
 	}
-	// fmt.Printf("XMLName: %#v\n", catpic.XMLName)
-	// fmt.Printf("url: %q\n", catpic.URL)
-	// fmt.Printf("id: %q\n", catpic.ID)
-	// fmt.Printf("source: %q\n", catpic.SourceURL)
-	return catpic.URL + " ```Source Info: " + catpic.SourceURL + "\n```"
+	response := catpic.URL + " ```Source Info: " + catpic.SourceURL + "\n```"
+	s.ChannelMessageSend(m.ChannelID, response)
 }

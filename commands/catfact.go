@@ -12,6 +12,8 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+
+	"github.com/bwmarrin/discordgo"
 )
 
 type catFact struct {
@@ -22,7 +24,7 @@ type catFact struct {
 var catfact = catFact{}
 
 //CatFact returns url of a random cat image
-func CatFact() string {
+func CatFact(s *discordgo.Session, m *discordgo.MessageCreate) {
 	resp, err := http.Get("https://catfact.ninja/fact")
 	if err != nil {
 		fmt.Println(err.Error())
@@ -31,5 +33,5 @@ func CatFact() string {
 	body, _ := ioutil.ReadAll(resp.Body)
 
 	json.Unmarshal(body, &catfact)
-	return catfact.Fact
+	s.ChannelMessageSend(m.ChannelID, catfact.Fact)
 }

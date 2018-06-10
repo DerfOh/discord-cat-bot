@@ -16,13 +16,16 @@ var BotID string
 var goBot *discordgo.Session
 var startTime time.Time
 
-func getUptime() time.Duration {
+// GetUptime Provides the time the bot has been running as type time
+func GetUptime() time.Duration {
 	return time.Since(startTime)
 }
 
 // Start starts opens connections and starts the bot
 func Start(GitBranch string, GitSummary string, BuildDate string) {
 	startTime = time.Now()
+	about.SetStart(startTime)
+	about.SetGit(GitBranch, GitSummary, BuildDate)
 
 	// connect
 	goBot, err := discordgo.New("Bot " + config.Token)
@@ -56,85 +59,57 @@ func Start(GitBranch string, GitSummary string, BuildDate string) {
 func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	// split the contents of the string into an array
 	content := strings.Split(m.Content, " ")
-	// var c *discordgo.Channel
 
 	// check for prefix or @ mention
 	if strings.HasPrefix(m.Content, config.BotPrefix) || strings.Contains(m.Content, BotID) {
 		// ignore the bots messages
 		if m.Author.ID == BotID {
 			return
-		} else {
-			fmt.Println(m.Author.ID + ": " + m.Content)
 		}
 
 		// if the message contains the string then call a function that responds with a string
 		if strings.Contains(m.Content, "cat") {
-			response := command.Cat()
-			s.ChannelMessageSend(m.ChannelID, response)
+			command.Cat(s, m)
 		}
 
 		if strings.Contains(m.Content, "fact") {
-			response := command.CatFact()
-			s.ChannelMessageSend(m.ChannelID, response)
+			command.CatFact(s, m)
 		}
 
 		if strings.Contains(m.Content, "8ball") || strings.Contains(m.Content, "should") {
-			response := command.EightBall()
-			s.ChannelMessageSend(m.ChannelID, response)
+			command.EightBall(content, s, m)
 		}
 
 		if strings.Contains(m.Content, "compare") {
-			response := command.Compare(content)
-			s.ChannelMessageSend(m.ChannelID, response)
+			command.Compare(content, s, m)
 		}
 
 		if strings.Contains(m.Content, "isup") {
-			response := command.IsUp(content)
-			s.ChannelMessageSend(m.ChannelID, response)
+			command.IsUp(content, s, m)
 		}
 
-		// simple commands that aren't in the commands folder
-		if m.Content == "!time" {
-			t := time.Now()
-			s.ChannelMessageSend(m.ChannelID, "The time is "+t.Format("15:04")+" in catsville.")
+		if strings.Contains(m.Content, "date") {
+			command.Date(s, m)
 		}
 
-		if m.Content == "!date" {
-			t := time.Now()
-			s.ChannelMessageSend(m.ChannelID, "The date is "+t.Format("01-02-2006")+" in catsville.")
-		}
-
-		if m.Content == "!iloveyou" {
-			s.ChannelMessageSend(m.ChannelID, "I know "+m.Author.Username)
+		if strings.Contains(m.Content, "time") {
+			command.Time(s, m)
 		}
 
 		if strings.Contains(m.Content, "vote") {
-			fmt.Println("reaction")
-			s.MessageReactionAdd(m.ChannelID, m.ID, "👍")
-			s.MessageReactionAdd(m.ChannelID, m.ID, "👎")
+			command.Vote(s, m)
 		}
-
-		if m.Content == "!about" {
-			uptime := getUptime()
-			//s.ChannelMessageSend(m.ChannelID, "Uptime: "+uptime.String()+" \n"+"Branch: "+GitBranch+"\n Commit: "+GitSummary+"\n Timestamp: "+BuildDate)
-			embed := NewEmbed().
-				SetTitle("cat-bot statistics").
-				SetDescription("Uptime: "+uptime.String()).
-				AddField("Branch: ", GitBranch).
-				AddField("Commit: ", GitSummary).
-				SetImage("https://cdn.discordapp.com/avatars/119249192806776836/cc32c5c3ee602e1fe252f9f595f9010e.jpg?size=2048").
-				SetThumbnail("https://cdn.discordapp.com/avatars/119249192806776836/cc32c5c3ee602e1fe252f9f595f9010e.jpg?size=2048").
-				SetColor(0x00ff00).MessageEmbed
-
-			s.ChannelMessageSendEmbed(m.ChannelID, embed)
-
+		if strings.Contains(m.Content, "about") {
+			command.About(s, m)
 		}
 
 		if strings.Contains(m.Content, "meow") {
-			start := time.Now()
-			s.ChannelMessageSend(m.ChannelID, "Meow!")
-			elapsed := time.Since(start)
-			s.ChannelMessageSend(m.ChannelID, "(Meow took "+elapsed.String()+")")
+			command.Meow(s, m)
+		}
+
+		// simple commands that aren't in the commands folder
+		if m.Content == "!iloveyou" {
+			s.ChannelMessageSend(m.ChannelID, "I know "+m.Author.Username)
 		}
 
 		if strings.Contains(m.Content, "ping") {

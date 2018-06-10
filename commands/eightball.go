@@ -6,11 +6,21 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+
+	"github.com/bwmarrin/discordgo"
 )
 
 //EightBall returns an answer when the command !8ball is used
-func EightBall() string {
-	resp, err := http.Get("https://8ball.delegator.com/magic/JSON/cat")
+func EightBall(content []string, s *discordgo.Session, m *discordgo.MessageCreate) {
+	url := "https://8ball.delegator.com/magic/JSON/"
+	for i := range content {
+		if i != 0 {
+			url += "+" + content[i]
+		} else {
+			url += content[i]
+		}
+	}
+	resp, err := http.Get(url)
 	if err != nil {
 		fmt.Println(err.Error())
 		//return
@@ -30,6 +40,6 @@ func EightBall() string {
 	if err := json.Unmarshal([]byte(jStr), &cont); err != nil {
 		log.Fatal(err)
 	}
-	//fmt.Printf("%+v\n", cont.MagicKey.AnswerKey)
-	return cont.MagicKey.AnswerKey
+	fmt.Printf(url)
+	s.ChannelMessageSend(m.ChannelID, cont.MagicKey.AnswerKey)
 }
