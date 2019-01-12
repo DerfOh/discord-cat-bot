@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/bwmarrin/discordgo"
-	"github.com/derfoh/discord-cat-bot/commands"
+	command "github.com/derfoh/discord-cat-bot/commands"
 	"github.com/derfoh/discord-cat-bot/config"
 )
 
@@ -107,36 +107,33 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 			command.Meow(s, m)
 		}
 
-		// simple commands that aren't in the commands folder
-		if m.Content == "!iloveyou" {
-			s.ChannelMessageSend(m.ChannelID, "I know "+m.Author.Username)
+		if strings.Contains(m.Content, "love") {
+			command.Love(s, m)
 		}
 
 		if strings.Contains(m.Content, "ping") {
-			start := time.Now()
-			s.ChannelMessageSend(m.ChannelID, "")
-			elapsed := time.Since(start)
-			s.ChannelMessageSend(m.ChannelID, "Pong! "+elapsed.String())
+			command.Ping(s, m)
 		}
 
+		// simple commands that aren't in the commands folder
 		if strings.Contains(m.Content, "thanks") || strings.Contains(m.Content, "Thanks") || strings.Contains(m.Content, "Thank you") || strings.Contains(m.Content, "thank you") {
-			s.ChannelMessageSend(m.ChannelID, "You're welcome "+m.Author.Mention()+"!")
+			command.Thanks(s, m)
 		}
 
 		if strings.Contains(m.Content, "good night") || strings.Contains(m.Content, "Good night") || strings.Contains(m.Content, "goodnight") {
-			s.ChannelMessageSend(m.ChannelID, "Good night "+m.Author.Mention()+".")
+			command.GoodNight(s, m)
 		}
 
 		if strings.Contains(m.Content, "good morning") || strings.Contains(m.Content, "Good morning") {
-			s.ChannelMessageSend(m.ChannelID, "Good morning "+m.Author.Mention()+"!")
+			command.GoodMorning(s, m)
 		}
 
 		if strings.Contains(m.Content, "hello") || strings.Contains(m.Content, "Hello") {
-			s.ChannelMessageSend(m.ChannelID, "Welcome "+m.Author.Mention()+".")
+			command.Hello(s, m)
 		}
 
 		if strings.Contains(m.Content, "good bye") || strings.Contains(m.Content, "Good bye") || strings.Contains(m.Content, "Goodbye") || strings.Contains(m.Content, "Good bye") {
-			s.ChannelMessageSend(m.ChannelID, "See ya "+m.Author.Mention()+"!")
+			command.Goodbye(s, m)
 		}
 
 	}
