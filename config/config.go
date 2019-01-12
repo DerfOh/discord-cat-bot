@@ -7,7 +7,9 @@ import (
 )
 
 var (
-	Token     string
+	// Token retrieved from discord api docs and placed into the config.json
+	Token string
+	// BotPrefix is the prefix defined in the config.json
 	BotPrefix string
 
 	config *configStruct

@@ -68,6 +68,10 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 		}
 
 		// if the message contains the string then call a function that responds with a string
+		if strings.Contains(m.Content, "help") {
+			command.Help(s, m)
+		}
+
 		if strings.Contains(m.Content, "cat") {
 			command.Cat(s, m)
 		}
@@ -115,7 +119,6 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 			command.Ping(s, m)
 		}
 
-		// simple commands that aren't in the commands folder
 		if strings.Contains(m.Content, "thanks") || strings.Contains(m.Content, "Thanks") || strings.Contains(m.Content, "Thank you") || strings.Contains(m.Content, "thank you") {
 			command.Thanks(s, m)
 		}
