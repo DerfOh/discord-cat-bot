@@ -115,6 +115,10 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 			command.Meow(s, m)
 		}
 
+		if strings.Contains(m.Content, "bark") {
+			command.Bark(s, m)
+		}
+
 		if strings.Contains(m.Content, "love") {
 			command.Love(s, m)
 		}
