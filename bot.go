@@ -76,11 +76,15 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 			command.Cat(s, m)
 		}
 
+		if strings.Contains(m.Content, "dog") {
+			command.Dog(s, m)
+		}
+
 		if strings.Contains(m.Content, "fact") {
 			command.CatFact(s, m)
 		}
 
-		if strings.Contains(m.Content, "8ball") || strings.Contains(m.Content, "should") {
+		if strings.Contains(m.Content, "8ball") || strings.Contains(m.Content, "should") || strings.Contains(m.Content, "will") {
 			command.EightBall(content, s, m)
 		}
 
@@ -115,10 +119,6 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 			command.Love(s, m)
 		}
 
-		if strings.Contains(m.Content, "ping") {
-			command.Ping(s, m)
-		}
-
 		if strings.Contains(m.Content, "thanks") || strings.Contains(m.Content, "Thanks") || strings.Contains(m.Content, "Thank you") || strings.Contains(m.Content, "thank you") {
 			command.Thanks(s, m)
 		}
@@ -137,6 +137,10 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 		if strings.Contains(m.Content, "good bye") || strings.Contains(m.Content, "Good bye") || strings.Contains(m.Content, "Goodbye") || strings.Contains(m.Content, "Good bye") {
 			command.Goodbye(s, m)
+		}
+
+		if strings.Contains(m.Content, "ping") {
+			command.Ping(s, m)
 		}
 
 	}
