@@ -67,6 +67,17 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 			return
 		}
 
+		// only certain users can issue these commands
+		if m.Author.ID == "105138136106942464" {
+			if strings.Contains(m.Content, "startserver") {
+				command.StartServer(content, s, m)
+			}
+
+			if strings.Contains(m.Content, "stopserver") {
+				command.StopServer(content, s, m)
+			}
+		}
+
 		// if the message contains the string then call a function that responds with a string
 		if strings.Contains(m.Content, "help") {
 			command.Help(s, m)
@@ -74,14 +85,6 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 		if strings.Contains(m.Content, "cat") {
 			command.Cat(s, m)
-		}
-
-		if strings.Contains(m.Content, "startserver") {
-			command.StartServer(content, s, m)
-		}
-
-		if strings.Contains(m.Content, "stopserver") {
-			command.StartServer(content, s, m)
 		}
 
 		if strings.Contains(m.Content, "dog") {
