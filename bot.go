@@ -76,6 +76,14 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 			command.Cat(s, m)
 		}
 
+		if strings.Contains(m.Content, "startserver") {
+			command.StartServer(content, s, m)
+		}
+
+		if strings.Contains(m.Content, "stopserver") {
+			command.StartServer(content, s, m)
+		}
+
 		if strings.Contains(m.Content, "dog") {
 			command.Dog(s, m)
 		}
