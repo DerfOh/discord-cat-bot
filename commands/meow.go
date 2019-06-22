@@ -9,7 +9,7 @@ import (
 )
 
 //Meow returns meow response
-func Meow(s *discordgo.Session, m *discordgo.MessageCreate) {
+func Meow(content []string, s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	meows := make([]string, 0)
 	meows = append(meows,
@@ -25,5 +25,6 @@ func Meow(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	rand.Seed(time.Now().Unix()) // initialize global pseudo random generator
 	response := fmt.Sprint(meows[rand.Intn(len(meows))])
+	SoundBoard(content, s, m)
 	s.ChannelMessageSend(m.ChannelID, response)
 }

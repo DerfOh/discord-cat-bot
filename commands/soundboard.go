@@ -29,10 +29,9 @@ func SoundBoard(content []string, s *discordgo.Session, m *discordgo.MessageCrea
 				if strings.Contains(f.Name(), fileName) {
 					fmt.Println("PlayAudioFile:", f.Name())
 					s.UpdateStatus(0, f.Name())
-
 					dgvoice.PlayAudioFile(dgv, fmt.Sprintf("%s/%s", folder, f.Name()), make(chan bool))
+					// ToDo: Disconnect may be replaced by s.ChannelVoiceLeave()
 					dgv.Disconnect()
-					//s.ChannelVoiceLeave()
 				}
 			}
 			// Close connections

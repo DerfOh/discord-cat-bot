@@ -127,7 +127,7 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 		}
 
 		if strings.Contains(m.Content, "meow") {
-			command.Meow(s, m)
+			command.Meow(content, s, m)
 		}
 
 		if strings.Contains(m.Content, "bark") {
