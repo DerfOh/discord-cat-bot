@@ -9,7 +9,8 @@ I created this to learn how to use go to write a discord bot. I'll put it here i
 ```
 {
     "Token":"YOUR.SECRET.TOKEN",
-    "BotPrefix":"!"
+    "BotPrefix":"!",
+    "BotOwner":"YOUR DISCORD ID"
 }
 ```
 

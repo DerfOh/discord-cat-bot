@@ -68,7 +68,7 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 		}
 
 		// only certain users can issue these commands
-		if m.Author.ID == "105138136106942464" {
+		if m.Author.ID == config.BotOwner {
 			if strings.Contains(m.Content, "startserver") {
 				command.StartServer(content, s, m)
 			}

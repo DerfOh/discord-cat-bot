@@ -11,6 +11,8 @@ var (
 	Token string
 	// BotPrefix is the prefix defined in the config.json
 	BotPrefix string
+	// BotOwner is the user ID of the user running the bot
+	BotOwner string
 
 	config *configStruct
 )
@@ -18,6 +20,7 @@ var (
 type configStruct struct {
 	Token     string `json:"Token"`
 	BotPrefix string `json:"BotPrefix"`
+	BotOwner  string `json:"BotOwner"`
 }
 
 // ReadConfig reads the contents of the config file
@@ -36,6 +39,7 @@ func ReadConfig() error {
 
 	Token = config.Token
 	BotPrefix = config.BotPrefix
+	BotOwner = config.BotOwner
 
 	return nil
 }
