@@ -127,7 +127,10 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 		}
 
 		if strings.Contains(m.Content, "meow") {
-			command.Meow(content, s, m)
+			newContent := "meow meow"
+			content := strings.Split(newContent, " ")
+			command.SoundBoard(content, s, m)
+			command.Meow(s, m)
 		}
 
 		if strings.Contains(m.Content, "bark") {
