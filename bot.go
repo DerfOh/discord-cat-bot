@@ -9,6 +9,7 @@ import (
 	"github.com/bwmarrin/discordgo"
 	command "github.com/derfoh/discord-cat-bot/commands"
 	"github.com/derfoh/discord-cat-bot/config"
+	notification "github.com/derfoh/discord-cat-bot/notifications"
 )
 
 // BotID is the id set by discord in the main function
@@ -46,6 +47,7 @@ func Start(GitBranch string, GitSummary string, BuildDate string) {
 			fmt.Println("Error attempting to set my status")
 		}
 	})
+	goBot.AddHandler(voiceUpdateHandler)
 
 	// Open connection
 	err = goBot.Open()
@@ -167,6 +169,45 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	}
 
+}
+
+func voiceUpdateHandler(s *discordgo.Session, vs *discordgo.VoiceStateUpdate) {
+	fmt.Println("ChannelID: " + vs.ChannelID)
+	// fmt.Println("Deaf: " + vs.Deaf)
+	fmt.Println("GuildID: " + vs.GuildID)
+	// fmt.Println("Mute: " + vs.Mute)
+	// fmt.Println("SelfDeaf: " + vs.SelfDeaf)
+	// fmt.Println("SelfMute: " + vs.SelfMute)
+	fmt.Println("SessionID: " + vs.SessionID)
+	// fmt.Println("Suppress: " + vs.Suppress)
+	fmt.Println("UserID: " + vs.UserID)
+
+	if vs.UserID == BotID {
+		return
+	}
+
+	// Find the channel that the message came from.
+	c, err := s.State.Channel(vs.ChannelID)
+	if err != nil {
+		// Could not find channel.
+		return
+	}
+
+	// Find the guild for that channel.
+	g, err := s.State.Guild(c.GuildID)
+	if err != nil {
+		// Could not find guild.
+		return
+	}
+
+	// Look for the notification target in that guild's current voice states.
+	for _, states := range g.VoiceStates {
+		if states.UserID == config.BotOwner && vs.ChannelID == states.ChannelID {
+			// fmt.Println("found bot owner")
+			notification.Notify("userjoined", s, vs.ChannelID)
+			return
+		}
+	}
 }
 
 // Stop ends closes the connection
