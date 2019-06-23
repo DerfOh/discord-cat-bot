@@ -23,11 +23,11 @@ func SoundBoard(content []string, s *discordgo.Session, m *discordgo.MessageCrea
 			folder := "./commands/sounds/"
 			fileName := content[i] + ".dca"
 			// Start loop and attempt to play all files in the given folder
-			//fmt.Println("Reading Folder: ", folder)
+			fmt.Println("Reading Folder: ", folder)
 			files, _ := ioutil.ReadDir(folder)
 			for _, f := range files {
 				if strings.Contains(f.Name(), fileName) {
-					//fmt.Println(fileName + " and " + f.Name() + " match ")
+					fmt.Println(fileName + " and " + f.Name() + " match ")
 					// Load the sound file.
 					err := loadSound(fileName)
 					if err != nil {
@@ -127,6 +127,29 @@ func playSound(s *discordgo.Session, guildID, channelID string) (err error) {
 	// Send the buffer data.
 	for _, buff := range buffer {
 		vc.OpusSend <- buff
+	}
+
+	// Stop speaking
+	vc.Speaking(false)
+
+	// Sleep for a specificed amount of time before ending.
+	time.Sleep(250 * time.Millisecond)
+
+	// Disconnect from the provided voice channel.
+	vc.Disconnect()
+
+	// Clear the buffer
+	buffer = nil
+	return nil
+}
+
+// leaveChannel explicitly makes the bot leave
+func leaveChannel(s *discordgo.Session, guildID, channelID string) (err error) {
+
+	// Join the provided voice channel.
+	vc, err := s.ChannelVoiceJoin(guildID, channelID, false, true)
+	if err != nil {
+		return err
 	}
 
 	// Stop speaking
