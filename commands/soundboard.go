@@ -1,88 +1,144 @@
 package command
 
 import (
-	"errors"
+	"encoding/binary"
 	"fmt"
+	"io"
 	"io/ioutil"
+	"os"
 	"strings"
+	"time"
 
-	"github.com/bwmarrin/dgvoice"
 	"github.com/bwmarrin/discordgo"
 )
 
-//SoundBoard returns connects to voice channel and plays a sound
+var buffer = make([][]byte, 0)
+
+// SoundBoard makes bot join voice channel and play audio file
+//		dca files are created using combindation of dca golang and ffmpeg 'ffmpeg -i test.mp3 -f s16le -ar 48000 -ac 2 pipe:1 | dca > test.dca'
 func SoundBoard(content []string, s *discordgo.Session, m *discordgo.MessageCreate) {
 	for i := range content {
 		if i != 0 {
-			fmt.Println(content[i])
-			folder := "./commands/sounds"
-			fileName := content[i] + ".mp3"
-			dgv, err := joinUserVoiceChannel(s, m.Author.ID)
-			if err != nil {
-				fmt.Println(err)
-				return
-			}
+			// cfmt.Println(content[i])
+			folder := "./commands/sounds/"
+			fileName := content[i] + ".dca"
 			// Start loop and attempt to play all files in the given folder
-			fmt.Println("Reading Folder: ", folder)
+			//fmt.Println("Reading Folder: ", folder)
 			files, _ := ioutil.ReadDir(folder)
 			for _, f := range files {
 				if strings.Contains(f.Name(), fileName) {
-					fmt.Println("PlayAudioFile:", f.Name())
-					s.UpdateStatus(0, f.Name())
-					dgvoice.PlayAudioFile(dgv, fmt.Sprintf("%s/%s", folder, f.Name()), make(chan bool))
-					// ToDo: Disconnect may be replaced by s.ChannelVoiceLeave()
-					dgv.Disconnect()
+					//fmt.Println(fileName + " and " + f.Name() + " match ")
+					// Load the sound file.
+					err := loadSound(fileName)
+					if err != nil {
+						fmt.Println("Error loading sound: ", err)
+						return
+					}
 				}
 			}
-			// Close connections
-			dgv.Close()
-		}
-	}
-}
+			// Find the channel that the message came from.
+			c, err := s.State.Channel(m.ChannelID)
+			if err != nil {
+				// Could not find channel.
+				return
+			}
 
-// below functions taken from https://github.com/bwmarrin/discordgo/wiki/FAQ#playing-audio-over-a-voice-connection
+			// Find the guild for that channel.
+			g, err := s.State.Guild(c.GuildID)
+			if err != nil {
+				// Could not find guild.
+				return
+			}
 
-func findUserVoiceState(session *discordgo.Session, userid string) (*discordgo.VoiceState, error) {
-	for _, guild := range session.State.Guilds {
-		for _, vs := range guild.VoiceStates {
-			if vs.UserID == userid {
-				return vs, nil
+			// Look for the message sender in that guild's current voice states.
+			for _, vs := range g.VoiceStates {
+				if vs.UserID == m.Author.ID {
+					err = playSound(s, g.ID, vs.ChannelID)
+					if err != nil {
+						fmt.Println("Error playing sound:", err)
+					}
+
+					return
+				}
 			}
 		}
 	}
-	return nil, errors.New("Could not find user's voice state")
 }
 
-func joinUserVoiceChannel(session *discordgo.Session, userID string) (*discordgo.VoiceConnection, error) {
-	// Find a user's current voice channel
-	vs, err := findUserVoiceState(session, userID)
+// loadSound attempts to load an encoded sound file from disk.
+func loadSound(fileName string) error {
+
+	file, err := os.Open("./commands/sounds/" + fileName)
 	if err != nil {
-		return nil, err
+		fmt.Println("Error opening dca file :", err)
+		return err
 	}
 
-	// Join the user's channel and start unmuted and deafened.
-	return session.ChannelVoiceJoin(vs.GuildID, vs.ChannelID, false, true)
+	var opuslen int16
+
+	for {
+		// Read opus frame length from dca file.
+		err = binary.Read(file, binary.LittleEndian, &opuslen)
+
+		// If this is the end of the file, just return.
+		if err == io.EOF || err == io.ErrUnexpectedEOF {
+			err := file.Close()
+			if err != nil {
+				return err
+			}
+			return nil
+		}
+
+		if err != nil {
+			fmt.Println("Error reading from dca file :", err)
+			return err
+		}
+
+		// Read encoded pcm from dca file.
+		InBuf := make([]byte, opuslen)
+		err = binary.Read(file, binary.LittleEndian, &InBuf)
+
+		// Should not be any end of file errors
+		if err != nil {
+			fmt.Println("Error reading from dca file :", err)
+			return err
+		}
+
+		// Append encoded pcm data to the buffer.
+		buffer = append(buffer, InBuf)
+	}
 }
 
-// Reads an opus packet to send over the vc.OpusSend channel
-// func readOpus(source io.Reader) ([]byte, error) {
-// 	var opuslen int16
-// 	err := binary.Read(source, binary.LittleEndian, &opuslen)
-// 	if err != nil {
-// 		if err == io.EOF || err == io.ErrUnexpectedEOF {
-// 			return nil, err
-// 		}
-// 		return nil, errors.New("ERR reading opus header")
-// 	}
+// playSound plays the current buffer to the provided channel.
+func playSound(s *discordgo.Session, guildID, channelID string) (err error) {
 
-// 	var opusframe = make([]byte, opuslen)
-// 	err = binary.Read(source, binary.LittleEndian, &opusframe)
-// 	if err != nil {
-// 		if err == io.EOF || err == io.ErrUnexpectedEOF {
-// 			return nil, err
-// 		}
-// 		return nil, errors.New("ERR reading opus frame")
-// 	}
+	// Join the provided voice channel.
+	vc, err := s.ChannelVoiceJoin(guildID, channelID, false, true)
+	if err != nil {
+		return err
+	}
 
-// 	return opusframe, nil
-// }
+	// Sleep for a specified amount of time before playing the sound
+	time.Sleep(250 * time.Millisecond)
+
+	// Start speaking.
+	vc.Speaking(true)
+
+	// Send the buffer data.
+	for _, buff := range buffer {
+		vc.OpusSend <- buff
+	}
+
+	// Stop speaking
+	vc.Speaking(false)
+
+	// Sleep for a specificed amount of time before ending.
+	time.Sleep(250 * time.Millisecond)
+
+	// Disconnect from the provided voice channel.
+	vc.Disconnect()
+
+	// Clear the buffer
+	buffer = nil
+	return nil
+}
