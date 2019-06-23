@@ -6,7 +6,7 @@ jobs:
   build:
     docker:
       # specify the version
-      - image: circleci/golang:1.8
+      - image: circleci/golang:1.9
       
     working_directory: /go/src/github.com/derfoh/discord-cat-bot
     steps:
@@ -15,7 +15,7 @@ jobs:
 
       # Set up environment
       - run: docker login -u $DOCKER_USER -p $DOCKER_PASS
-      - run: echo '{ "Token":"'$TOKEN'", "BotPrefix":"'$PREFIX'" }' > config.json
+      - run: echo '{ "Token":"'$TOKEN'", "BotPrefix":"'$PREFIX'", "BotOwner":"''$OWNER''" }' > config.json
       - run: go get github.com/ahmetb/govvv
       # get test and build the app
       - run: go get -v -t -d ./...
