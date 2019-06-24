@@ -85,7 +85,7 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 			command.Help(s, m)
 		}
 
-		if strings.Contains(m.Content, "soundboard") {
+		if strings.Contains(m.Content, "soundboard") || strings.Contains(m.Content, "sb") {
 			command.SoundBoard(content, s, m)
 		}
 

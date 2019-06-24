@@ -19,7 +19,7 @@ var buffer = make([][]byte, 0)
 func SoundBoard(content []string, s *discordgo.Session, m *discordgo.MessageCreate) {
 	for i := range content {
 		if i != 0 {
-			// cfmt.Println(content[i])
+			// fmt.Println(content[i])
 			folder := "./commands/sounds/"
 			fileName := content[i] + ".dca"
 			// Start loop and attempt to play all files in the given folder
