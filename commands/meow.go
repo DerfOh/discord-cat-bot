@@ -23,7 +23,7 @@ func Meow(s *discordgo.Session, m *discordgo.MessageCreate) {
 		" 	मियांउ",
 		" 	เหมียว")
 
-	rand.Seed(time.Now().Unixnano()) // initialize global pseudo random generator
+	rand.Seed(time.Now().UnixNano()) // initialize global pseudo random generator
 	response := fmt.Sprint(meows[rand.Intn(len(meows))])
 	s.ChannelMessageSend(m.ChannelID, response)
 }
