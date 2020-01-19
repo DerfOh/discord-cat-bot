@@ -9,7 +9,6 @@ import (
 	"github.com/bwmarrin/discordgo"
 	command "github.com/derfoh/discord-cat-bot/commands"
 	"github.com/derfoh/discord-cat-bot/config"
-	notification "github.com/derfoh/discord-cat-bot/notifications"
 )
 
 // BotID is the id set by discord in the main function
@@ -203,8 +202,8 @@ func voiceUpdateHandler(s *discordgo.Session, vs *discordgo.VoiceStateUpdate) {
 	// Look for the notification target in that guild's current voice states.
 	for _, states := range g.VoiceStates {
 		if states.UserID == config.BotOwner && vs.ChannelID == states.ChannelID {
-			// fmt.Println("found bot owner")
-			notification.Notify("userjoined", s, vs.ChannelID)
+			fmt.Println("found bot owner")
+			//notification.Notify("userjoined", s, vs.ChannelID)
 			return
 		}
 	}
