@@ -81,7 +81,7 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 		// if the message contains the string then call a function that responds with a string
 		if strings.Contains(m.Content, "help") {
-			command.Help(s, m)
+			go command.Help(s, m)
 		}
 
 		if strings.Contains(m.Content, "soundboard") || strings.Contains(m.Content, "sb") {
@@ -89,81 +89,81 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 		}
 
 		if strings.Contains(m.Content, "cat") {
-			command.Cat(s, m)
+			go command.Cat(s, m)
 		}
 
 		if strings.Contains(m.Content, "dog") {
-			command.Dog(s, m)
+			go command.Dog(s, m)
 		}
 
 		if strings.Contains(m.Content, "fact") {
-			command.CatFact(s, m)
+			go command.CatFact(s, m)
 		}
 
 		if strings.Contains(m.Content, "8ball") || strings.Contains(m.Content, "should") || strings.Contains(m.Content, "will") {
-			command.EightBall(content, s, m)
+			go command.EightBall(content, s, m)
 		}
 
 		if strings.Contains(m.Content, "compare") {
-			command.Compare(content, s, m)
+			go command.Compare(content, s, m)
 		}
 
 		if strings.Contains(m.Content, "isup") {
-			command.IsUp(content, s, m)
+			go command.IsUp(content, s, m)
 		}
 
 		if strings.Contains(m.Content, "date") {
-			command.Date(s, m)
+			go command.Date(s, m)
 		}
 
 		if strings.Contains(m.Content, "time") {
-			command.Time(s, m)
+			go command.Time(s, m)
 		}
 
 		if strings.Contains(m.Content, "vote") {
-			command.Vote(s, m)
+			go command.Vote(s, m)
 		}
 		if strings.Contains(m.Content, "about") {
-			command.About(s, m)
+			go command.About(s, m)
 		}
 
 		if strings.Contains(m.Content, "meow") {
 			newContent := "meow meow"
 			content := strings.Split(newContent, " ")
-			command.SoundBoard(content, s, m)
-			command.Meow(s, m)
+			go command.SoundBoard(content, s, m)
+			go command.Meow(s, m)
 		}
 
 		if strings.Contains(m.Content, "bark") {
-			command.Bark(s, m)
+			go command.Bark(s, m)
 		}
 
 		if strings.Contains(m.Content, "love") {
-			command.Love(s, m)
+			go command.Love(s, m)
 		}
 
 		if strings.Contains(m.Content, "thanks") || strings.Contains(m.Content, "Thanks") || strings.Contains(m.Content, "Thank you") || strings.Contains(m.Content, "thank you") {
-			command.Thanks(s, m)
+			go command.Thanks(s, m)
 		}
 
 		if strings.Contains(m.Content, "good night") || strings.Contains(m.Content, "Good night") || strings.Contains(m.Content, "goodnight") {
-			command.GoodNight(s, m)
+			go command.GoodNight(s, m)
 		}
 
 		if strings.Contains(m.Content, "good morning") || strings.Contains(m.Content, "Good morning") {
-			command.GoodMorning(s, m)
+			go command.GoodMorning(s, m)
 		}
 
 		if strings.Contains(m.Content, "hello") || strings.Contains(m.Content, "Hello") {
-			command.Hello(s, m)
+			go command.Hello(s, m)
 		}
 
 		if strings.Contains(m.Content, "good bye") || strings.Contains(m.Content, "Good bye") || strings.Contains(m.Content, "Goodbye") || strings.Contains(m.Content, "Good bye") {
-			command.Goodbye(s, m)
+			go command.Goodbye(s, m)
 		}
 
 		if strings.Contains(m.Content, "ping") {
-			command.Ping(s, m)
+			go command.Ping(s, m)
 		}
 
 	}
