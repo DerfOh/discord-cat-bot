@@ -8,8 +8,8 @@ import (
 	config "github.com/derfoh/discord-cat-bot/config"
 )
 
-//StartServer brings up a digital ocean server
-func StartServer(content []string, s *discordgo.Session, m *discordgo.MessageCreate) {
+//ServerStart brings up a digital ocean server
+func ServerStart(content []string, s *discordgo.Session, m *discordgo.MessageCreate) {
 	var droplet string
 	host := content[1]
 

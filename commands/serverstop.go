@@ -8,8 +8,8 @@ import (
 	config "github.com/derfoh/discord-cat-bot/config"
 )
 
-//StopServer brings down a digital ocean server
-func StopServer(content []string, s *discordgo.Session, m *discordgo.MessageCreate) {
+//ServerStop brings down a digital ocean server
+func ServerStop(content []string, s *discordgo.Session, m *discordgo.MessageCreate) {
 	var droplet string
 	host := content[1]
 
