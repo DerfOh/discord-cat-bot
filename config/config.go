@@ -13,14 +13,17 @@ var (
 	BotPrefix string
 	// BotOwner is the user ID of the user running the bot
 	BotOwner string
+	// DigitalOceanToken Digital Ocean personal access token (PAT) generated from: https://cloud.digitalocean.com/settings/applications
+	DigitalOceanToken string
 
 	config *configStruct
 )
 
 type configStruct struct {
-	Token     string `json:"Token"`
-	BotPrefix string `json:"BotPrefix"`
-	BotOwner  string `json:"BotOwner"`
+	Token             string `json:"Token"`
+	BotPrefix         string `json:"BotPrefix"`
+	BotOwner          string `json:"BotOwner"`
+	DigitalOceanToken string `json:"DigitalOceanToken"`
 }
 
 // ReadConfig reads the contents of the config file
@@ -40,6 +43,7 @@ func ReadConfig() error {
 	Token = config.Token
 	BotPrefix = config.BotPrefix
 	BotOwner = config.BotOwner
+	DigitalOceanToken = config.DigitalOceanToken
 
 	return nil
 }

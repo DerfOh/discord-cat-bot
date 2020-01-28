@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/bwmarrin/discordgo"
+	config "github.com/derfoh/discord-cat-bot/config"
 )
 
 //StopServer brings down a digital ocean server
@@ -12,6 +13,7 @@ func StopServer(content []string, s *discordgo.Session, m *discordgo.MessageCrea
 	var droplet string
 	host := content[1]
 
+	//TODO: find the droplet id of a server given the name
 	switch host {
 	case "minecraft":
 		droplet = "145416705"
@@ -23,7 +25,7 @@ func StopServer(content []string, s *discordgo.Session, m *discordgo.MessageCrea
 
 	url := "https://api.digitalocean.com/v2/droplets/" + droplet + "/actions"
 	//fmt.Println("URL:>", url)
-	var bearer = "Bearer " + "93fec65a8a9669e4c2b6748bde1ba1124be2950e3f80954230add997c699766d"
+	var bearer = "Bearer " + config.DigitalOceanToken
 	var jsonStr = []byte(`{"type":"power_off"}`)
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
 	req.Header.Set("Content-Type", "application/json")

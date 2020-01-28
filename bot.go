@@ -69,6 +69,7 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 		}
 
 		// only certain users can issue these commands
+		// TODO: Make a command that lists the dropplets given a particular personal access token
 		if m.Author.ID == config.BotOwner {
 			if strings.Contains(m.Content, "startserver") {
 				command.StartServer(content, s, m)
@@ -76,6 +77,10 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 			if strings.Contains(m.Content, "stopserver") {
 				command.StopServer(content, s, m)
+			}
+
+			if strings.Contains(m.Content, "serverlist") {
+				go command.ServerList(content, s, m)
 			}
 		}
 
