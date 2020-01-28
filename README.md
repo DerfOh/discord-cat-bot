@@ -1,9 +1,9 @@
 # cat-bot [![CircleCI](https://circleci.com/gh/DerfOh/discord-cat-bot.svg?style=svg&circle-token=cc7894464eeb802f507351561f793a1c63b4696b)](https://circleci.com/gh/DerfOh/discord-cat-bot)
 
 ## About
-cat-bot is a simple bot for posting random cat images to a discord server. It has grown to a bit more than just that though as these things do.
+Originally for posting random cat pictures to discord cat-bot is a bot that evolved to do several random and fun things.
 
-I created this to learn how to use go to write a discord bot. I'll put it here in hopes that it helps someone else some day.
+Generate a token, choose a prefix, find your discord ID, and optionally provide a digital ocean personal access token to control digital ocean servers. 
 
 ## Example config.json
 ```
@@ -11,6 +11,7 @@ I created this to learn how to use go to write a discord bot. I'll put it here i
     "Token":"YOUR.SECRET.TOKEN",
     "BotPrefix":"!",
     "BotOwner":"YOUR DISCORD ID"
+    "DigitalOceanToken":"DIGITALOCEANTOKEN"
 }
 ```
 
