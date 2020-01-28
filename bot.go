@@ -72,11 +72,11 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 		// TODO: Make a command that lists the dropplets given a particular personal access token
 		if m.Author.ID == config.BotOwner {
 			if strings.Contains(m.Content, "serverstart") {
-				command.ServerStart(content, s, m)
+				go command.ServerStart(content, s, m)
 			}
 
 			if strings.Contains(m.Content, "serverstop") {
-				command.ServerStop(content, s, m)
+				go command.ServerStop(content, s, m)
 			}
 
 			if strings.Contains(m.Content, "serverlist") {
