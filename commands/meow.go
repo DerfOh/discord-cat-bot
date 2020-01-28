@@ -17,7 +17,7 @@ func Meow(s *discordgo.Session, m *discordgo.MessageCreate) {
 		"mow",
 		"purrpurr",
 		"мяу",
-		"喵",
+		"貓",
 		"야옹",
 		"	മ്യാവു",
 		" 	मियांउ",
