@@ -2,7 +2,9 @@ package command
 
 import (
 	"bytes"
+	"io/ioutil"
 	"net/http"
+	"strconv"
 
 	"github.com/bwmarrin/discordgo"
 	config "github.com/derfoh/discord-cat-bot/config"
@@ -10,21 +12,11 @@ import (
 
 //ServerStop brings down a digital ocean server
 func ServerStop(content []string, s *discordgo.Session, m *discordgo.MessageCreate) {
-	var droplet string
-	host := content[1]
 
-	//TODO: find the droplet id of a server given the name
-	switch host {
-	case "minecraft":
-		droplet = "145416705"
-	default:
-		response := "Unable to determine server ID"
-		s.ChannelMessageSend(m.ChannelID, response)
-		return
-	}
+	host := content[1]
+	droplet := strconv.Itoa(GetServerID(host))
 
 	url := "https://api.digitalocean.com/v2/droplets/" + droplet + "/actions"
-	//fmt.Println("URL:>", url)
 	var bearer = "Bearer " + config.DigitalOceanToken
 	var jsonStr = []byte(`{"type":"power_off"}`)
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
@@ -40,9 +32,11 @@ func ServerStop(content []string, s *discordgo.Session, m *discordgo.MessageCrea
 
 	// fmt.Println("response Status:", resp.Status)
 	// fmt.Println("response Headers:", resp.Header)
-	// body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := ioutil.ReadAll(resp.Body)
 	// fmt.Println("response Body:", string(body))
-	response := resp.Status
+
+	// TODO: parse response body for readable status
+	response := string(body)
 	s.ChannelMessageSend(m.ChannelID, response)
 }
 

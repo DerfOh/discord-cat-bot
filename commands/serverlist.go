@@ -12,6 +12,9 @@ import (
 	config "github.com/derfoh/discord-cat-bot/config"
 )
 
+// DropletID is the integer value of the droplet identified by name
+var DropletID int
+
 // DropletList defines the structure for the json object returned by digital ocean api calls
 type DropletList struct {
 	Droplets []struct {
@@ -106,9 +109,41 @@ func ServerList(content []string, s *discordgo.Session, m *discordgo.MessageCrea
 	}
 
 	// Gets all of the droplets in the list
+
 	for i := range res.Droplets {
 		// fmt.Println(res.Droplets[i].Name)
+		// go s.ChannelMessageSend(m.ChannelID, res.Droplets[i].Name+" --- "+strconv.Itoa(res.Droplets[i].ID))
 		go s.ChannelMessageSend(m.ChannelID, res.Droplets[i].Name)
 	}
+}
 
+// GetServerID takes name and returns server ID
+func GetServerID(name string) int {
+	url := "https://api.digitalocean.com/v2/droplets"
+
+	var bearer = "Bearer " + config.DigitalOceanToken
+	var jsonStr = []byte(`{}`)
+	req, err := http.NewRequest("GET", url, bytes.NewBuffer(jsonStr))
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Authorization", bearer)
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		panic(err)
+	}
+	defer resp.Body.Close()
+	jStr, _ := ioutil.ReadAll(resp.Body)
+	res := DropletList{}
+
+	if err := json.Unmarshal([]byte(jStr), &res); err != nil {
+		log.Fatal(err)
+	}
+
+	for i := range res.Droplets {
+		if res.Droplets[i].Name == name {
+			DropletID = res.Droplets[i].ID
+		}
+	}
+	return DropletID
 }
