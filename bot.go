@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"strconv"
 	"strings"
 	"time"
 
@@ -40,11 +39,11 @@ func Start(GitBranch string, GitSummary string, BuildDate string) {
 	// Add handlers
 	goBot.AddHandler(messageHandler)
 	goBot.AddHandler(func(discord *discordgo.Session, ready *discordgo.Ready) {
-		servers := goBot.State.Guilds
-		err = goBot.UpdateStatus(0, "with yarn on "+strconv.Itoa(len(servers))+" servers.")
-		if err != nil {
-			fmt.Println("Error attempting to set my status")
-		}
+		// servers := goBot.State.Guilds
+		// err = goBot.UpdateStatus(0, "with yarn on "+strconv.Itoa(len(servers))+" servers.")
+		// if err != nil {
+		// 	fmt.Println("Error attempting to set my status")
+		// }
 	})
 	goBot.AddHandler(voiceUpdateHandler)
 
@@ -86,89 +85,54 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 		// if the message contains the string then call a function that responds with a string
 		if strings.Contains(m.Content, "help") {
-			go command.Help(s, m)
-		}
-
-		if strings.Contains(m.Content, "soundboard") || strings.Contains(m.Content, "sb") {
+			go command.Help(content, s, m)
+		} else if strings.Contains(m.Content, "soundboard") || strings.Contains(m.Content, "sb") {
 			command.SoundBoard(content, s, m)
-		}
-
-		if strings.Contains(m.Content, "cat") {
-			go command.Cat(s, m)
-		}
-
-		if strings.Contains(m.Content, "dog") {
-			go command.Dog(s, m)
-		}
-
-		if strings.Contains(m.Content, "fact") {
-			go command.CatFact(s, m)
-		}
-
-		if strings.Contains(m.Content, "8ball") || strings.Contains(m.Content, "should") || strings.Contains(m.Content, "will") {
+		} else if strings.Contains(m.Content, "cat") {
+			go command.Cat(content, s, m)
+		} else if strings.Contains(m.Content, "dog") {
+			go command.Dog(content, s, m)
+		} else if strings.Contains(m.Content, "fact") {
+			go command.CatFact(content, s, m)
+		} else if strings.Contains(m.Content, "8ball") || strings.Contains(m.Content, "should") || strings.Contains(m.Content, "will") {
 			go command.EightBall(content, s, m)
-		}
-
-		if strings.Contains(m.Content, "compare") {
+		} else if strings.Contains(m.Content, "complete") || strings.Contains(m.Content, "finish") || strings.Contains(m.Content, "predict") {
+			go command.CompleteThis(content, s, m)
+		} else if strings.Contains(m.Content, "compare") {
 			go command.Compare(content, s, m)
-		}
-
-		if strings.Contains(m.Content, "isup") {
+		} else if strings.Contains(m.Content, "isup") {
 			go command.IsUp(content, s, m)
-		}
-
-		if strings.Contains(m.Content, "date") {
-			go command.Date(s, m)
-		}
-
-		if strings.Contains(m.Content, "time") {
-			go command.Time(s, m)
-		}
-
-		if strings.Contains(m.Content, "vote") {
-			go command.Vote(s, m)
-		}
-		if strings.Contains(m.Content, "about") {
-			go command.About(s, m)
-		}
-
-		if strings.Contains(m.Content, "meow") {
+		} else if strings.Contains(m.Content, "date") {
+			go command.Date(content, s, m)
+		} else if strings.Contains(m.Content, "time") {
+			go command.Time(content, s, m)
+		} else if strings.Contains(m.Content, "vote") {
+			go command.Vote(content, s, m)
+		} else if strings.Contains(m.Content, "about") {
+			go command.About(content, s, m)
+		} else if strings.Contains(m.Content, "meow") {
 			newContent := "meow meow"
 			content := strings.Split(newContent, " ")
 			go command.SoundBoard(content, s, m)
-			go command.Meow(s, m)
-		}
-
-		if strings.Contains(m.Content, "bark") {
-			go command.Bark(s, m)
-		}
-
-		if strings.Contains(m.Content, "love") {
-			go command.Love(s, m)
-		}
-
-		if strings.Contains(m.Content, "thanks") || strings.Contains(m.Content, "Thanks") || strings.Contains(m.Content, "Thank you") || strings.Contains(m.Content, "thank you") {
-			go command.Thanks(s, m)
-		}
-
-		if strings.Contains(m.Content, "good night") || strings.Contains(m.Content, "Good night") || strings.Contains(m.Content, "goodnight") {
-			go command.GoodNight(s, m)
-		}
-
-		if strings.Contains(m.Content, "good morning") || strings.Contains(m.Content, "Good morning") {
-			go command.GoodMorning(s, m)
-		}
-
-		if strings.Contains(m.Content, "hello") || strings.Contains(m.Content, "Hello") {
-			go command.Hello(s, m)
-		}
-
-		if strings.Contains(m.Content, "good bye") || strings.Contains(m.Content, "Good bye") || strings.Contains(m.Content, "Goodbye") || strings.Contains(m.Content, "Good bye") {
-			go command.Goodbye(s, m)
-		}
-
-		if strings.Contains(m.Content, "ping") {
-			go command.Ping(s, m)
+			go command.Meow(content, s, m)
+		} else if strings.Contains(m.Content, "bark") {
+			go command.Bark(content, s, m)
+		} else if strings.Contains(m.Content, "love") {
+			go command.Love(content, s, m)
+		} else if strings.Contains(m.Content, "thanks") || strings.Contains(m.Content, "Thanks") || strings.Contains(m.Content, "Thank you") || strings.Contains(m.Content, "thank you") {
+			go command.Thanks(content, s, m)
+		} else if strings.Contains(m.Content, "good night") || strings.Contains(m.Content, "Good night") || strings.Contains(m.Content, "goodnight") {
+			go command.GoodNight(content, s, m)
+		} else if strings.Contains(m.Content, "good morning") || strings.Contains(m.Content, "Good morning") {
+			go command.GoodMorning(content, s, m)
+		} else if strings.Contains(m.Content, "hello") || strings.Contains(m.Content, "Hello") {
+			go command.Hello(content, s, m)
+		} else if strings.Contains(m.Content, "good bye") || strings.Contains(m.Content, "Good bye") || strings.Contains(m.Content, "Goodbye") || strings.Contains(m.Content, "Good bye") {
+			go command.Goodbye(content, s, m)
+		} else if strings.Contains(m.Content, "ping") {
+			go command.Ping(content, s, m)
+		} else {
+			go command.CompleteThis(content, s, m)
 		}
 
 	}

@@ -5,7 +5,7 @@ import (
 )
 
 //Love returns a loving response
-func Love(s *discordgo.Session, m *discordgo.MessageCreate) {
+func Love(content []string, s *discordgo.Session, m *discordgo.MessageCreate) {
 	response := "Love ya too"
 	s.ChannelMessageSend(m.ChannelID, response)
 }

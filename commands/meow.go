@@ -9,7 +9,7 @@ import (
 )
 
 //Meow returns meow response
-func Meow(s *discordgo.Session, m *discordgo.MessageCreate) {
+func Meow(content []string, s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	meows := make([]string, 0)
 	meows = append(meows,

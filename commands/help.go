@@ -5,7 +5,7 @@ import (
 )
 
 //Help lists all functions in the command package
-func Help(s *discordgo.Session, m *discordgo.MessageCreate) {
+func Help(content []string, s *discordgo.Session, m *discordgo.MessageCreate) {
 	commandList := "about\n catfact \ndate \ngoodmorning \nhello \nisup \nmeow \nthanks \nvote \ncat \ncompare \neightball \ngoodbye \ngoodnight \nhelp  \nlove \nping \ntime"
 	embed := NewEmbed().
 		AddField("Commands: ", commandList).

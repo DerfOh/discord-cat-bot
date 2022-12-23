@@ -5,7 +5,7 @@ import (
 )
 
 //Hello returns hello response
-func Hello(s *discordgo.Session, m *discordgo.MessageCreate) {
+func Hello(content []string, s *discordgo.Session, m *discordgo.MessageCreate) {
 	response := "Welcome " + m.Author.Mention() + "."
 	s.ChannelMessageSend(m.ChannelID, response)
 }

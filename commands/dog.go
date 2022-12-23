@@ -16,7 +16,7 @@ type dogpicStruct struct {
 var dogpic = dogpicStruct{}
 
 //Dog returns url of a random cat image
-func Dog(s *discordgo.Session, m *discordgo.MessageCreate) {
+func Dog(content []string, s *discordgo.Session, m *discordgo.MessageCreate) {
 	resp, err := http.Get("https://dog.ceo/api/breeds/image/random")
 	if err != nil {
 		fmt.Println(err.Error())

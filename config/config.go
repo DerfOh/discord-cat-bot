@@ -15,6 +15,8 @@ var (
 	BotOwner string
 	// DigitalOceanToken Digital Ocean personal access token (PAT) generated from: https://cloud.digitalocean.com/settings/applications
 	DigitalOceanToken string
+	// Openai token
+	OpenaiToken string
 
 	config *configStruct
 )
@@ -24,6 +26,7 @@ type configStruct struct {
 	BotPrefix         string `json:"BotPrefix"`
 	BotOwner          string `json:"BotOwner"`
 	DigitalOceanToken string `json:"DigitalOceanToken"`
+	OpenaiToken       string `json:"OpenaiToken"`
 }
 
 // ReadConfig reads the contents of the config file
@@ -44,6 +47,7 @@ func ReadConfig() error {
 	BotPrefix = config.BotPrefix
 	BotOwner = config.BotOwner
 	DigitalOceanToken = config.DigitalOceanToken
+	OpenaiToken = config.OpenaiToken
 
 	return nil
 }

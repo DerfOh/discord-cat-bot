@@ -19,7 +19,7 @@ var GitSummary string
 var BuildDate string
 
 //About provides info about the bot
-func About(s *discordgo.Session, m *discordgo.MessageCreate) {
+func About(content []string, s *discordgo.Session, m *discordgo.MessageCreate) {
 	uptime := GetUptime()
 
 	embed := NewEmbed().

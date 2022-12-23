@@ -5,7 +5,7 @@ import (
 )
 
 //Goodbye returns goodbye response
-func Goodbye(s *discordgo.Session, m *discordgo.MessageCreate) {
+func Goodbye(content []string, s *discordgo.Session, m *discordgo.MessageCreate) {
 	response := "Good night " + m.Author.Mention() + "."
 	s.ChannelMessageSend(m.ChannelID, response)
 }

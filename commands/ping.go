@@ -7,7 +7,7 @@ import (
 )
 
 //Ping returns response time
-func Ping(s *discordgo.Session, m *discordgo.MessageCreate) {
+func Ping(content []string, s *discordgo.Session, m *discordgo.MessageCreate) {
 	start := time.Now()
 	s.ChannelMessageSend(m.ChannelID, "")
 	elapsed := time.Since(start)

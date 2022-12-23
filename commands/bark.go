@@ -9,7 +9,7 @@ import (
 )
 
 //Bark returns bark response
-func Bark(s *discordgo.Session, m *discordgo.MessageCreate) {
+func Bark(content []string, s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	barks := make([]string, 0)
 	barks = append(barks,
