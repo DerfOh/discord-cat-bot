@@ -94,7 +94,7 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 			go command.Dog(content, s, m)
 		} else if strings.Contains(m.Content, "fact") {
 			go command.CatFact(content, s, m)
-		} else if strings.Contains(m.Content, "8ball") || strings.Contains(m.Content, "should") || strings.Contains(m.Content, "will") {
+		} else if strings.Contains(m.Content, "8ball") {
 			go command.EightBall(content, s, m)
 		} else if strings.Contains(m.Content, "complete") || strings.Contains(m.Content, "finish") || strings.Contains(m.Content, "predict") {
 			go command.CompleteThis(content, s, m)
